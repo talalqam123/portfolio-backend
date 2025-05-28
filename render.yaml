@@ -6,4 +6,6 @@ services:
     startCommand: npm start
     envVars:
       - key: NODE_ENV
-        value: production 
+        value: production
+      - key: FRONTEND_URL
+        value: https://taq-folio.vercel.app/ # Replace with your actual Vercel URL 

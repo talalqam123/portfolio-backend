@@ -1,8 +1,31 @@
 import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
+import cors from 'cors';
 
 const app = express();
+
+// CORS configuration
+const allowedOrigins = [
+  process.env.FRONTEND_URL || 'https://taq-folio.vercel.app/', // Your Vercel frontend URL
+  'http://localhost:5173',  // Vite dev server
+  'http://localhost:3000'   // Local development
+];
+
+app.use(cors({
+  origin: function(origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    
+    if (allowedOrigins.indexOf(origin) === -1) {
+      const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+      return callback(new Error(msg), false);
+    }
+    return callback(null, true);
+  },
+  credentials: true // Allow credentials (cookies, authorization headers, etc.)
+}));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
