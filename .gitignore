@@ -136,3 +136,4 @@ dist
 .pnp.*
 
 404: Not Found
+.vercel
