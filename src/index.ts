@@ -7,7 +7,7 @@ const app = express();
 
 // CORS configuration
 const allowedOrigins = [
-  process.env.FRONTEND_URL || 'https://taq-folio.vercel.app/', // Your Vercel frontend URL
+  'https://taq-folio.vercel.app', // Remove trailing slash
   'http://localhost:5173',  // Vite dev server
   'http://localhost:3000'   // Local development
 ];
@@ -17,13 +17,19 @@ app.use(cors({
     // Allow requests with no origin (like mobile apps or curl requests)
     if (!origin) return callback(null, true);
     
-    if (allowedOrigins.indexOf(origin) === -1) {
-      const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
-      return callback(new Error(msg), false);
+    // Remove any trailing slash from the origin
+    const normalizedOrigin = origin.replace(/\/$/, '');
+    
+    if (allowedOrigins.includes(normalizedOrigin)) {
+      return callback(null, true);
     }
-    return callback(null, true);
+    
+    const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+    return callback(new Error(msg), false);
   },
-  credentials: true // Allow credentials (cookies, authorization headers, etc.)
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
 }));
 
 app.use(express.json());
