@@ -7,9 +7,9 @@ const app = express();
 
 // CORS configuration
 const allowedOrigins = [
-  'https://taq-folio.vercel.app', // Remove trailing slash
-  'http://localhost:5173',  // Vite dev server
-  'http://localhost:3000'   // Local development
+  'https://taq-folio.vercel.app',
+  'http://localhost:5173',
+  'http://localhost:3000'
 ];
 
 app.use(cors({
@@ -29,8 +29,15 @@ app.use(cors({
   },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+  exposedHeaders: ['set-cookie']
 }));
+
+// Add security headers
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
+  next();
+});
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
