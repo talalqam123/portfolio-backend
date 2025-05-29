@@ -1,0 +1,7 @@
+ALTER TABLE case_studies
+  ALTER COLUMN client_name DROP NOT NULL,
+  ALTER COLUMN client_industry DROP NOT NULL,
+  ALTER COLUMN services DROP NOT NULL,
+  ALTER COLUMN challenge DROP NOT NULL,
+  ALTER COLUMN solution DROP NOT NULL,
+  ALTER COLUMN result DROP NOT NULL; 
