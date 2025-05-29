@@ -9,7 +9,8 @@ const app = express();
 const allowedOrigins = [
   'https://taq-folio.vercel.app',
   'http://localhost:5173',
-  'http://localhost:3000'
+  'http://localhost:3000',
+  'https://portfolio-backend-1cz4.onrender.com'
 ];
 
 app.use(cors({
@@ -21,6 +22,11 @@ app.use(cors({
     const normalizedOrigin = origin.replace(/\/$/, '');
     
     if (allowedOrigins.includes(normalizedOrigin)) {
+      return callback(null, true);
+    }
+    
+    // For development, allow all origins
+    if (process.env.NODE_ENV !== 'production') {
       return callback(null, true);
     }
     
@@ -36,6 +42,9 @@ app.use(cors({
 // Add security headers
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Credentials', 'true');
+  if (req.headers.origin) {
+    res.setHeader('Access-Control-Allow-Origin', req.headers.origin);
+  }
   next();
 });
 

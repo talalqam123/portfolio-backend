@@ -38,14 +38,19 @@ export function setupAuth(app: Express) {
     resave: false,
     saveUninitialized: false,
     store: storage.sessionStore,
+    name: 'portfolio.sid', // Custom cookie name
+    proxy: true, // Trust the reverse proxy
     cookie: {
       secure: process.env.NODE_ENV === 'production',
       maxAge: 24 * 60 * 60 * 1000, // 24 hours
       sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
-      domain: process.env.NODE_ENV === 'production' ? '.vercel.app' : undefined
+      domain: process.env.NODE_ENV === 'production' ? undefined : undefined, // Let the browser handle the domain
+      httpOnly: true,
+      path: '/'
     }
   };
 
+  // Important: Set trust proxy BEFORE session middleware
   app.set("trust proxy", 1);
   app.use(session(sessionSettings));
   app.use(passport.initialize());
