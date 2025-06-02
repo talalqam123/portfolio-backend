@@ -5,6 +5,15 @@ import cors from 'cors';
 
 const app = express();
 
+// Health Check Route
+app.get('/health', (req, res) => {
+  res.status(200).json({
+    status: 'healthy',
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime()
+  });
+});
+
 // CORS configuration
 const allowedOrigins = [
   'https://taq-folio.vercel.app',
